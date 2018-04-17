@@ -1,0 +1,4 @@
+[rserver]
+port=10200 # The port for the rserver to listen
+loglevel="info" # The log level for the rserver (off, error, warn, info, debug, trace)
+packages=["caret", "ggplot2", "randomForest", "raster", "sp"] # The R packages that are loaded when starting the rserver.
