@@ -11,8 +11,14 @@ addons:
       - docker-ce
 
 script:
-  - export TAG=`if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master"
-    ]]; then echo "dev"; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi`
+  - export TAG=`
+      if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master"]]; then
+        echo "dev";
+      elif [ $TRAVIS_PULL_REQUEST == "true" ] then
+        echo $TRAVIS_PULL_REQUEST_BRANCH;
+      else
+        echo $TRAVIS_BRANCH;
+      fi`
   - docker build --tag $REPO:$TAG --file Dockerfile .
   # TODO: add test
   # docker run -t $REPO:$TAG make test
@@ -28,5 +34,5 @@ notifications:
 env:
   global:
   - REPO="umrdbs/mapping-r-server"
-  - secure: Y+/Tfzns8vK8D4i+eqfqR8w1ct553xtTupCSe6nGdCwO/KS1HG9XAbUT1bZBbP2fO9pi3zGHZgk6gkkuOQHzaYsifU8Rgz8JIIgJ5uWSioSP4nl6QgQmOI14YpArF7SeeNHLo19H9cWjetDZGTiIGibdfjWZ51UwsCWGdkAWcTCyLxYKBD1RNm0c1NnpYbBh1XGC9azaQIAynQwc1NT4x0g2ZLdM8HQ+oMnRzhykKLrZl3Q1MnEC3g3RydxJhe4dt1I7N/dWlkWI4l+6Y7c90cH5lMLH5fRTRbsxtwk+8QQNqnaDgWUbVGf80dK2A86Tyk7zIHxIHA3h9nCVqZ78BuaNp32ilDxf3n3V4K2BXgSVZj4xK8IJwjrg+CJ+B6ML+WAkYZQ7JPXTnEgMDSVu4AYpxQxwNothJOUeqsobXYbPzuhvEzDBMuBNX0jB8L4haIFdLsn5dC8D1xQz8ImEoZcuj2wFz5dSiMCOqDSOj6U6O9IsvA/sQN51UUuBT0bydYgp1yuPTw6at+79vEwahS2XQ9NZHkfMziaNdJa9usOYKs9wIKES/td4c8nmVE8HiM6HCRPxZ94zAhRpns+JIDFTE33XHbhlEzopIG3nAV4GHpW0t/yKdblfItuLT03e4DefdL2+DwLgNJaRudqNtSov0B4NGW4j1lNoL1Mz2LY=
-  - secure: aKzmL0ufoWkmrm5YXlxzBMfsFob+N4oqkqfopQGP58+fpPPFOp8ZCQJpUxiR2uGBXbExCl9WFjE0XrjFmv7kpgtadc5u/1aEYBDShyeuspsQ8D8H3p7+dYssjYOd66+ds402Z9qyA44+geK5qnVBeN0D9VEJ+8LQvznHeO6TrgpDFIIwl3JwH7mHdH/teSo38BQiG5X90JDRUbjIXMMvH7h7xkGIOfqafpXZ7GA6oWJe/fBBpiQIjv9yWBRVeB9xecScmFb8IUEbqsJiW+oQ9zBMg40yiGG2TQT8nsWUfHMtcVkRcWfxXWHUiUOgy6kDN4/qCQQrT7d2W9BYczhg+mfFhCmDWp3Z6E00lXw+LL4wLUglCq+EDhCcdp2oceC9gWNvRL2VIO6RsJmrMqWKUs6zc5SvcamAaoFiEqCS5qqypAFSRTcjI9mhp/k+aJBIxUjygB6EC19ZE9MHzrFBUCjN9dxaCKRBZcr+1EMscRmxzOxMdaipj3Zc4PUlIqgHmRlEwzPxnK/8jJxp2MXIToTEv/6UKSEWyfMlcUbDb2/Z/kDLo/eSeCs41eF/dZgP8a9k6KSEZBvQ3ctnSekR9mccB9iR4jk80ke9jlgsX6ZwhAt7COazZMFs/IWF/Na2Cc+rJLmsVezQAHCk+mioU6x7/rHIF6WX0ZgyN6VNfmk=
+  - secure: "e/00l+SBn4/0j2/NUP9tlmvchUGR2t+rg/DxmPP6mGQ56G7Mb+uxHZb7S71pbnjcVhPG60m+ctqqzPrgnHJVNpSMEElAueBOYC/bZu0Gzkf1zd1JJbly5B1AODI1wTrC4hnIpEhfuD8S7Qj2HZuSH+oLSjsC1nn294CvOhAvxOL6zE8PClzenxEU+DwVpshXajpWvGDk9MRASnFrbJAo1IYtecm8GRJSMNCEHpLvPbebOjmcTLWZ1Rl19eCm+dsnABD5zafoiUwQ4/R8VjBlMDFlG5Ah7nV4qs2NLDFha9r7ZO4jyWbKfBX2CimfU6ZPY4SffYluB0qtLwqQHhPLh9ZXyKehm9g8eW+y6rklmDaBTE3+WNfdsZLUMh10kI9S28XSlUAp7m5lox5dlfw0BwLqaiWsPB10AuucchLLJA157B4Om9SmbgiDfY0xiud9vl2xSlgiwM9R5/osGGWzVPrjBpZP4yhBuAFAzQNOS3P6+V2ls5k2U4wBzk2KgSNd4JLh96PW1ZrEWa9GDODelqssPz077jAz+EThLpYxsdZuiy38gQ/CnL+daj3u7dxvwZHWnvpwufesE5bk6fRK+tTbkS2sFA0ZfpBV/QLBqTKOV6HkyxSpqsaCw5tpK8lPRAKqfKnp4YTDkXcqm7Nk4r6TPIGOuibCQEIHZuakqoM="
+  - secure: "GBTdt74WqTIIWm9OLzLlBI2P/5HCQoMfMTDNzHQ6kHHei4BLHB93NveM6e3VugxOrsp9rJalHYDQo48PNfAL74wDrce6BSsof1LdVLsFuzJp1+IBzlnDt7q/GP95gAxobAzWmQ+WzqS9th6+dc6ax1wQ7FBD9ACMCFxP52sAxiXjPpckkYjeuZ/g+FSPgBvyG4fqwNM/2LTSoqIgY87iQ6dSCuhcWt8lVYUNGlvhjAPYtxyHqwdGuMgNpdPp/kb3JD9QEwXs3qWvILmNtOz0qC/Hi7M50rV+RvDQbIVrwr11O9EiAs6AaHpTXQAh8BspWF7adoYT6/9BPyUqkoAmlNLZcn1mgGpBeYmUGOPiUgJv01anrm1FvYhaXmYxPEqcQFxMIIxpa1FxdwYu8uNipni9ralm4SNrjvDEIy9NYAeUflsru7dR6CK4WQIN7nzilAJs/3arqqZUSRuz+1ibT2SsTTbm8tGTcBGeOMVLFN1My1awJSY8rZMtHT7+fTqIyAuBHxdY8HKMoZxzcfM1AOvw4wcHPfRJYS7oF6RSAReDyVPJB5BVW7ImAUCz9S2NLqwyBeIn+e8dSvAnZ6apIHDz1uBCc/ij6HphBnBaIMCkDQHJhTYPLezEf/c35JgDzcsBI96yaf51WEH8AYQhiQ712upr10ubj+tbRRAFww0="
