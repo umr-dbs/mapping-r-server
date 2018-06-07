@@ -1,0 +1,32 @@
+language: cpp
+dist: trusty
+sudo: required
+
+services:
+  - docker
+
+addons:
+  apt:
+    packages:
+      - docker-ce
+
+script:
+  - export TAG=`if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master"
+    ]]; then echo "dev"; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi`
+  - docker build --tag $REPO:$TAG --file Dockerfile .
+  # TODO: add test
+  # docker run -t $REPO:$TAG make test
+
+after_success:
+  - echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+  - if [[ $TRAVIS_PULL_REQUEST == "false" ]]; then docker push $REPO:$TAG; fi
+
+notifications:
+  slack:
+    secure: GVOuSt/DjnrogYKs3I82JFjPUFLvAvNQUo4iX6GkNrpTfibuCSeJirXjEHTWV3jkCNNQiLVHl/JJS+Bh3Nr1vAAHEHlZKybjbpvKpLJvpb1JWR65JocdFLqnARVs/V1xpsMhchULK2NR9o5m6cKblzaAjwGqs3HhH3Zt70aw2vUVwJ3YuUdDWNQeHhnzYB3qeWlfcBgMdlNgru0/M8I3wrP8E0czVso063VlpIFD/RXv2NxeYYipNQaLE86aoEe0J/mZMypEm1dkhGQIu581Ut5+U90OcVoC2h1BBVtmPtiI1gIJdd21eKwNAnjKVFkuphTPgUtW0NZE8tziV7nMNe/E5fDRSvtGOLN1XDuRGbBKrDg7ZZWRtj5MomcKkc4N71aDeXtJyoV9GcKD8mqrjAuq/ujDiA5DnLl7FGF+6gfEXEok+emK3mkfhaGRsDRbSLb5SuIOtScxbgQDcu7plsI0s4I+BC5QtlDCoAyhB1qHwGkEIvqbwbvrhEwYqYRTMD5l7H/AAwt0Tf/MvuOi+oP7Qt+G+idzoY1STOrq/FkhFRJ9WZ8QoEq7YhBPBebzPVNOXWUtE5ZDrSv+9gmhg5WU9Ypukl9ufrHHq5pKKzyKh1HJAPYyrLQterN46bxDmcN1mpzNuBuxMVW20cqqylQlFh8joWtGK6uTpdL43X4=
+
+env:
+  global:
+  - REPO="umrdbs/mapping-r-server"
+  - secure: Y+/Tfzns8vK8D4i+eqfqR8w1ct553xtTupCSe6nGdCwO/KS1HG9XAbUT1bZBbP2fO9pi3zGHZgk6gkkuOQHzaYsifU8Rgz8JIIgJ5uWSioSP4nl6QgQmOI14YpArF7SeeNHLo19H9cWjetDZGTiIGibdfjWZ51UwsCWGdkAWcTCyLxYKBD1RNm0c1NnpYbBh1XGC9azaQIAynQwc1NT4x0g2ZLdM8HQ+oMnRzhykKLrZl3Q1MnEC3g3RydxJhe4dt1I7N/dWlkWI4l+6Y7c90cH5lMLH5fRTRbsxtwk+8QQNqnaDgWUbVGf80dK2A86Tyk7zIHxIHA3h9nCVqZ78BuaNp32ilDxf3n3V4K2BXgSVZj4xK8IJwjrg+CJ+B6ML+WAkYZQ7JPXTnEgMDSVu4AYpxQxwNothJOUeqsobXYbPzuhvEzDBMuBNX0jB8L4haIFdLsn5dC8D1xQz8ImEoZcuj2wFz5dSiMCOqDSOj6U6O9IsvA/sQN51UUuBT0bydYgp1yuPTw6at+79vEwahS2XQ9NZHkfMziaNdJa9usOYKs9wIKES/td4c8nmVE8HiM6HCRPxZ94zAhRpns+JIDFTE33XHbhlEzopIG3nAV4GHpW0t/yKdblfItuLT03e4DefdL2+DwLgNJaRudqNtSov0B4NGW4j1lNoL1Mz2LY=
+  - secure: aKzmL0ufoWkmrm5YXlxzBMfsFob+N4oqkqfopQGP58+fpPPFOp8ZCQJpUxiR2uGBXbExCl9WFjE0XrjFmv7kpgtadc5u/1aEYBDShyeuspsQ8D8H3p7+dYssjYOd66+ds402Z9qyA44+geK5qnVBeN0D9VEJ+8LQvznHeO6TrgpDFIIwl3JwH7mHdH/teSo38BQiG5X90JDRUbjIXMMvH7h7xkGIOfqafpXZ7GA6oWJe/fBBpiQIjv9yWBRVeB9xecScmFb8IUEbqsJiW+oQ9zBMg40yiGG2TQT8nsWUfHMtcVkRcWfxXWHUiUOgy6kDN4/qCQQrT7d2W9BYczhg+mfFhCmDWp3Z6E00lXw+LL4wLUglCq+EDhCcdp2oceC9gWNvRL2VIO6RsJmrMqWKUs6zc5SvcamAaoFiEqCS5qqypAFSRTcjI9mhp/k+aJBIxUjygB6EC19ZE9MHzrFBUCjN9dxaCKRBZcr+1EMscRmxzOxMdaipj3Zc4PUlIqgHmRlEwzPxnK/8jJxp2MXIToTEv/6UKSEWyfMlcUbDb2/Z/kDLo/eSeCs41eF/dZgP8a9k6KSEZBvQ3ctnSekR9mccB9iR4jk80ke9jlgsX6ZwhAt7COazZMFs/IWF/Na2Cc+rJLmsVezQAHCk+mioU6x7/rHIF6WX0ZgyN6VNfmk=
