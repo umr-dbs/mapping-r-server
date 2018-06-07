@@ -1,0 +1,4 @@
+[rserver]
+port=10200
+loglevel="debug"
+packages=["caret", "ggplot2", "randomForest", "raster", "sp"]
