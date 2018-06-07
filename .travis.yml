@@ -14,7 +14,7 @@ script:
   - export TAG=`
       if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master"]]; then
         echo "dev";
-      elif [ $TRAVIS_PULL_REQUEST == "true" ] then
+      elif [[ $TRAVIS_PULL_REQUEST == "true" ]] then
         echo $TRAVIS_PULL_REQUEST_BRANCH;
       else
         echo $TRAVIS_BRANCH;
