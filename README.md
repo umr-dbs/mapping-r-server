@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/umr-dbs/mapping-r-server.svg?branch=master)](https://travis-ci.org/umr-dbs/mapping-r-server)
+
 # MAPPING R Server
 
 ## Requirements
