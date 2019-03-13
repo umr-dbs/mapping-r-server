@@ -362,7 +362,7 @@ namespace Rcpp {
 
         CrsId crsId = CrsId::from_srs_string(crs_string);
 
-        auto points = make_unique<PointCollection>(SpatioTemporalReference(crsId, TIMETYPE_UNIX));
+        auto points = std::make_unique<PointCollection>(SpatioTemporalReference(crsId, TIMETYPE_UNIX));
 
         auto coords = Rcpp::as<Rcpp::NumericMatrix>(SPDF.slot("coords"));
 

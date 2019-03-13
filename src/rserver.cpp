@@ -107,7 +107,7 @@ std::unique_ptr<PointCollection> query_points_source(BinaryStream &stream, int c
 
     BinaryReadBuffer new_request;
     stream.read(new_request);
-    auto points = make_unique<PointCollection>(new_request);
+    auto points = std::make_unique<PointCollection>(new_request);
     return points;
 }
 
@@ -127,7 +127,7 @@ std::unique_ptr<LineCollection> query_lines_source(BinaryStream &stream, int chi
     BinaryReadBuffer new_request;
     stream.read(new_request);
 
-    return make_unique<LineCollection>(new_request);
+    return std::make_unique<LineCollection>(new_request);
 }
 
 std::unique_ptr<PolygonCollection>
@@ -147,7 +147,7 @@ query_polygons_source(BinaryStream &stream, int childidx, const QueryRectangle &
     BinaryReadBuffer new_request;
     stream.read(new_request);
 
-    return make_unique<PolygonCollection>(new_request);
+    return std::make_unique<PolygonCollection>(new_request);
 }
 
 
@@ -416,7 +416,7 @@ auto RServerConnection::processDataForked(BinaryStream stream) -> void {
 
 
 std::unique_ptr<NonblockingServer::Connection> RServer::createConnection(int fd, int id) {
-    return make_unique<RServerConnection>(*this, fd, id);
+    return std::make_unique<RServerConnection>(*this, fd, id);
 }
 
 
